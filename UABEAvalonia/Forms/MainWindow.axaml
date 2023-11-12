@@ -60,10 +60,12 @@
 				<ColumnDefinition Width="*"></ColumnDefinition>
 				<ColumnDefinition Width="*"></ColumnDefinition>
 				<ColumnDefinition Width="*"></ColumnDefinition>
+        <ColumnDefinition Width="*"></ColumnDefinition>
 			</Grid.ColumnDefinitions>
 			<Button Grid.Column="0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" IsEnabled="False" Name="btnRename">Rename</Button>
 			<Button Grid.Column="1" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" IsEnabled="False" Name="btnRemove">Remove</Button>
 			<Button Grid.Column="2" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" IsEnabled="False" Name="btnInfo">Info</Button>
+      <Button Grid.Column="3" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" IsEnabled="False" Name="btnAll">All</Button>
 		</Grid>
     </Grid>
   </Grid>

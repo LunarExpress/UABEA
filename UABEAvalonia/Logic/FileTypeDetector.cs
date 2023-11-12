@@ -63,6 +63,7 @@ namespace UABEAvalonia
     {
         Unknown,
         AssetsFile,
-        BundleFile
+        BundleFile,
+        AllFile
     }
 }

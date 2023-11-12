@@ -55,6 +55,7 @@ namespace UABEAvalonia
             btnImport.Click += BtnImport_Click;
             btnRemove.Click += BtnRemove_Click;
             btnInfo.Click += BtnInfo_Click;
+            btnAll.Click += BtnAll_Click;
             btnExportAll.Click += BtnExportAll_Click;
             btnImportAll.Click += BtnImportAll_Click;
             btnRename.Click += BtnRename_Click;
@@ -986,6 +987,7 @@ namespace UABEAvalonia
                 btnRename.IsEnabled = enabled;
                 btnInfo.IsEnabled = enabled;
                 btnExportAll.IsEnabled = enabled;
+                btnAll.IsEnabled = enabled;
             }
 
             // always enable / disable no matter if there's assets or not
@@ -1002,6 +1004,41 @@ namespace UABEAvalonia
                 totalSize += dirInf.DecompressedSize;
             }
             return totalSize;
+        }
+
+        private void BtnAll_Click(object? sender, RoutedEventArgs e)
+        {
+            if (BundleInst == null)
+                return;
+
+            BundleWorkspaceItem? item = (BundleWorkspaceItem?)comboBox.SelectedItem;
+            List<AssetsFileInstance> assetsFiles = new List<AssetsFileInstance>();
+            for (int i = 0; i < comboBox.Items.Count; i++) 
+            {
+                BundleWorkspaceItem? listItem = (BundleWorkspaceItem?)comboBox.Items[i];
+                if (listItem == null)
+                    continue;
+                string itemName = listItem.Name;
+                AssetBundleFile bundleListFile = BundleInst.file;
+                Stream assetListStream = listItem.Stream;
+                assetListStream.Position = 0;
+                DetectedFileType fileListType = FileTypeDetector.DetectFileType(new AssetsFileReader(assetListStream), 0);
+                if (fileListType != DetectedFileType.AssetsFile)
+                    continue;
+                string assetMemPath = Path.Combine(BundleInst.path, itemName);
+                AssetsFileInstance fileInst = am.LoadAssetsFile(assetListStream, assetMemPath, true);
+                if (BundleInst != null && fileInst.parentBundle == null)
+                    fileInst.parentBundle = BundleInst;
+
+                if (!LoadOrAskTypeData(fileInst))
+                    return;
+                assetsFiles.Add(fileInst);
+            }
+            InfoWindow allinfo = new InfoWindow(am, assetsFiles, true);
+            allinfo.Closing += InfoWindow_Closing;
+            allinfo.Show();
+            openInfoWindows.Add(allinfo);
+            //不检测Filetype,遍历File列表并一个个创建fileInst实例
         }
     }
 }
